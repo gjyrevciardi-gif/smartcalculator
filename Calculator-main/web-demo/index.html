@@ -3,7 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Calculator Demo</title>
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="SmartCalc">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Smart Calculator</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon.svg">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,9 +24,16 @@
           </svg>
         </button>
         <button class="menu-button" id="menuButton" type="button" aria-label="Markup menu">
-          <span></span>
-          <span></span>
-          <span></span>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="6" y="3" width="12" height="18" rx="2" />
+            <path d="M8.5 7h7" />
+            <circle cx="9" cy="12" r=".7" />
+            <circle cx="12" cy="12" r=".7" />
+            <circle cx="15" cy="12" r=".7" />
+            <circle cx="9" cy="15" r=".7" />
+            <circle cx="12" cy="15" r=".7" />
+            <circle cx="15" cy="15" r=".7" />
+          </svg>
         </button>
       </div>
 
@@ -36,15 +49,20 @@
       <div class="display" id="display">0</div>
 
       <div class="keys">
-        <button class="key utility" data-action="all-clear">AC</button>
-        <button class="key utility" data-action="backspace">x</button>
+        <button class="key utility" data-action="backspace" aria-label="Backspace">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 5H9l-6 7 6 7h12z" />
+            <path d="M12 9l5 5M17 9l-5 5" />
+          </svg>
+        </button>
+        <button class="key utility" id="clearButton" data-action="all-clear">AC</button>
         <button class="key utility" data-action="percent">%</button>
-        <button class="key operation" data-operation="/">/</button>
+        <button class="key operation" data-operation="/">÷</button>
 
         <button class="key" data-digit="7">7</button>
         <button class="key" data-digit="8">8</button>
         <button class="key" data-digit="9">9</button>
-        <button class="key operation" data-operation="x">x</button>
+        <button class="key operation" data-operation="x">×</button>
 
         <button class="key" data-digit="4">4</button>
         <button class="key" data-digit="5">5</button>
@@ -56,8 +74,9 @@
         <button class="key" data-digit="3">3</button>
         <button class="key operation" data-operation="+">+</button>
 
-        <button class="key zero" data-digit="0">0</button>
-        <button class="key" data-action="decimal">.</button>
+        <button class="key utility" data-action="sign">+/-</button>
+        <button class="key" data-digit="0">0</button>
+        <button class="key" data-action="decimal">,</button>
         <button class="key operation" data-action="equals">=</button>
       </div>
     </section>
@@ -72,5 +91,12 @@
   </main>
 
   <script src="app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js");
+      });
+    }
+  </script>
 </body>
 </html>

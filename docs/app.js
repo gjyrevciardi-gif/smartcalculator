@@ -8,6 +8,7 @@ const historyButton = document.querySelector("#historyButton");
 const closeHistoryButton = document.querySelector("#closeHistoryButton");
 const historyPanel = document.querySelector("#historyPanel");
 const historyList = document.querySelector("#historyList");
+const clearButton = document.querySelector("#clearButton");
 
 const state = {
   current: "0",
@@ -15,6 +16,7 @@ const state = {
   queuedOperations: [],
   history: loadHistory(),
   markupPercent: 20,
+  lastExpression: "",
   waitingForNumber: false,
 };
 
@@ -46,12 +48,18 @@ keys.addEventListener("click", (event) => {
   if (button.dataset.action === "all-clear") allClear();
   if (button.dataset.action === "backspace") backspace();
   if (button.dataset.action === "percent") percent();
+  if (button.dataset.action === "sign") toggleSign();
   if (button.dataset.action === "equals") evaluate();
 
   render();
 });
 
 function inputDigit(digit) {
+  if (state.lastExpression && state.waitingForNumber) {
+    state.current = "0";
+    state.lastExpression = "";
+  }
+
   if (state.waitingForNumber || state.current === "0" || state.current === "") {
     state.current = digit;
     state.waitingForNumber = false;
@@ -62,6 +70,11 @@ function inputDigit(digit) {
 }
 
 function inputDecimal() {
+  if (state.lastExpression && state.waitingForNumber) {
+    state.current = "0";
+    state.lastExpression = "";
+  }
+
   if (state.waitingForNumber) {
     state.current = "0.";
     state.waitingForNumber = false;
@@ -74,6 +87,13 @@ function inputDecimal() {
 }
 
 function inputOperation(operation) {
+  if (state.lastExpression && state.waitingForNumber) {
+    state.queuedNumbers.push(parseCurrent());
+    state.queuedOperations.push(operation);
+    state.lastExpression = "";
+    return;
+  }
+
   if (state.waitingForNumber && state.queuedOperations.length > 0) {
     state.queuedOperations[state.queuedOperations.length - 1] = operation;
     return;
@@ -105,6 +125,7 @@ function evaluate() {
   const expressionText = buildExpression();
 
   state.current = formatWhole(total);
+  state.lastExpression = expressionText;
   state.history.unshift({
     expression: `${expressionText} + ${formatWhole(state.markupPercent)}%`,
     result: state.current,
@@ -120,10 +141,18 @@ function allClear() {
   state.current = "0";
   state.queuedNumbers = [];
   state.queuedOperations = [];
+  state.lastExpression = "";
   state.waitingForNumber = false;
 }
 
 function backspace() {
+  if (state.lastExpression && state.waitingForNumber) {
+    state.lastExpression = "";
+    state.current = "";
+    state.waitingForNumber = false;
+    return;
+  }
+
   if (state.waitingForNumber) {
     state.queuedOperations.pop();
     const previousNumber = state.queuedNumbers.pop();
@@ -156,13 +185,20 @@ function percent() {
   state.current = format(parseCurrent() / 100);
 }
 
+function toggleSign() {
+  if (state.current === "" || state.current === "0") return;
+  state.current = state.current.startsWith("-")
+    ? state.current.slice(1)
+    : `-${state.current}`;
+}
+
 function buildExpression() {
   const parts = [];
 
   state.queuedNumbers.forEach((number, index) => {
     parts.push(format(number));
     if (state.queuedOperations[index]) {
-      parts.push(state.queuedOperations[index]);
+      parts.push(displayOperation(state.queuedOperations[index]));
     }
   });
 
@@ -171,7 +207,7 @@ function buildExpression() {
     parts.push(state.current);
   }
 
-  return parts.join(" ");
+  return parts.join("");
 }
 
 function format(value) {
@@ -191,8 +227,17 @@ function parseCurrent() {
 }
 
 function render() {
-  display.textContent = state.current;
-  expression.textContent = buildExpression();
+  const activeExpression = buildExpression();
+  const displayText = state.lastExpression ? state.current : activeExpression || state.current || "0";
+
+  expression.textContent = state.lastExpression;
+  display.textContent = displayText;
+  display.style.fontSize = displayText.length > 9 ? "clamp(46px, 14vw, 82px)" : "";
+  expression.style.visibility = state.lastExpression ? "visible" : "hidden";
+  clearButton.textContent = (state.lastExpression && state.waitingForNumber)
+    || (state.current === "0" && state.queuedOperations.length === 0)
+    ? "AC"
+    : "C";
   renderHistory();
 
   document.querySelectorAll("[data-operation]").forEach((button) => {
@@ -200,6 +245,13 @@ function render() {
       && state.queuedOperations[state.queuedOperations.length - 1] === button.dataset.operation;
     button.classList.toggle("selected", selected);
   });
+}
+
+function displayOperation(operation) {
+  if (operation === "/") return "÷";
+  if (operation === "x") return "×";
+  if (operation === "-") return "-";
+  return operation;
 }
 
 function renderHistory() {

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Smart Calculator icon">
+  <rect width="1024" height="1024" rx="220" fill="#000000"/>
+  <rect x="144" y="116" width="736" height="792" rx="170" fill="#151515"/>
+  <rect x="214" y="186" width="596" height="182" rx="56" fill="#242424"/>
+  <circle cx="304" cy="500" r="64" fill="#3a3a3c"/>
+  <circle cx="512" cy="500" r="64" fill="#3a3a3c"/>
+  <circle cx="720" cy="500" r="64" fill="#ff9f0a"/>
+  <circle cx="304" cy="704" r="64" fill="#3a3a3c"/>
+  <circle cx="512" cy="704" r="64" fill="#3a3a3c"/>
+  <circle cx="720" cy="704" r="64" fill="#ff9f0a"/>
+  <path d="M512 230v94M465 277h94" stroke="#ff9f0a" stroke-width="44" stroke-linecap="round"/>
+  <path d="M720 450v100M670 500h100" stroke="#ffffff" stroke-width="34" stroke-linecap="round"/>
+</svg>

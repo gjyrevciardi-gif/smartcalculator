@@ -1,0 +1,276 @@
+:root {
+  color-scheme: dark;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  background: #000;
+  color: #fff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: #000;
+}
+
+button {
+  border: 0;
+  font: inherit;
+}
+
+.app {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.calculator {
+  width: min(100%, 430px);
+  min-height: min(860px, calc(100vh - 36px));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.topbar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding-top: 4px;
+}
+
+.menu-button {
+  width: 46px;
+  height: 38px;
+  display: grid;
+  place-content: center;
+  gap: 5px;
+  border-radius: 10px;
+  background: #1c1c1e;
+  cursor: pointer;
+}
+
+.history-button {
+  width: 46px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #1c1c1e;
+  color: #fff;
+  cursor: pointer;
+}
+
+.history-button svg {
+  width: 23px;
+  height: 23px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.menu-button span {
+  width: 22px;
+  height: 2px;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.markup-panel {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #1c1c1e;
+}
+
+.markup-panel[hidden] {
+  display: none;
+}
+
+.markup-panel label {
+  color: #d1d1d6;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.markup-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ff9f0a;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.markup-control input {
+  width: 74px;
+  height: 36px;
+  border: 1px solid #3a3a3c;
+  border-radius: 8px;
+  background: #000;
+  color: #fff;
+  font: inherit;
+  text-align: right;
+  padding: 0 8px;
+}
+
+.history-panel {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: min(82vw, 320px);
+  padding: 18px;
+  background: #111;
+  border-right: 1px solid #2c2c2e;
+  box-shadow: 24px 0 60px rgba(0, 0, 0, 0.45);
+  z-index: 3;
+}
+
+.history-panel[hidden] {
+  display: none;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.history-header h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.history-header button {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #2c2c2e;
+  color: #fff;
+  cursor: pointer;
+}
+
+.history-list {
+  display: grid;
+  gap: 14px;
+}
+
+.history-empty {
+  color: #8e8e93;
+  font-size: 16px;
+}
+
+.history-item {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #2c2c2e;
+}
+
+.history-expression {
+  color: #8e8e93;
+  font-size: 15px;
+}
+
+.history-result {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.expression {
+  min-height: 126px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  color: #8e8e93;
+  text-align: left;
+  font-size: 22px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.display {
+  min-height: 102px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  color: #fff;
+  font-size: clamp(54px, 18vw, 88px);
+  font-weight: 300;
+  line-height: 1;
+  overflow: hidden;
+  text-align: right;
+}
+
+.keys {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: auto;
+}
+
+.key {
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: #333;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: filter 120ms ease, transform 120ms ease;
+}
+
+.key:active {
+  filter: brightness(1.35);
+  transform: scale(0.97);
+}
+
+.utility {
+  background: #a5a5a5;
+  color: #000;
+}
+
+.operation {
+  background: #ff9f0a;
+  color: #fff;
+}
+
+.operation.selected {
+  background: #fff;
+  color: #ff9f0a;
+}
+
+.zero {
+  grid-column: span 2;
+  aspect-ratio: auto;
+  text-align: left;
+  padding-left: 33px;
+}
+
+@media (max-width: 380px) {
+  .app {
+    padding: 12px;
+  }
+
+  .keys {
+    gap: 9px;
+  }
+
+  .key {
+    font-size: 28px;
+  }
+}

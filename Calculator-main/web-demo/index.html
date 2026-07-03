@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculator Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app" aria-label="Calculator demo">
+    <section class="calculator">
+      <div class="topbar">
+        <button class="history-button" id="historyButton" type="button" aria-label="History">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 12a9 9 0 1 0 3-6.7" />
+            <path d="M3 4v5h5" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+        </button>
+        <button class="menu-button" id="menuButton" type="button" aria-label="Markup menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+      <div class="markup-panel" id="markupPanel" hidden>
+        <label for="markupInput">Markup percent</label>
+        <div class="markup-control">
+          <input id="markupInput" type="number" min="0" step="1" value="20">
+          <span>%</span>
+        </div>
+      </div>
+
+      <div class="expression" id="expression"></div>
+      <div class="display" id="display">0</div>
+
+      <div class="keys">
+        <button class="key utility" data-action="all-clear">AC</button>
+        <button class="key utility" data-action="backspace">x</button>
+        <button class="key utility" data-action="percent">%</button>
+        <button class="key operation" data-operation="/">/</button>
+
+        <button class="key" data-digit="7">7</button>
+        <button class="key" data-digit="8">8</button>
+        <button class="key" data-digit="9">9</button>
+        <button class="key operation" data-operation="x">x</button>
+
+        <button class="key" data-digit="4">4</button>
+        <button class="key" data-digit="5">5</button>
+        <button class="key" data-digit="6">6</button>
+        <button class="key operation" data-operation="-">-</button>
+
+        <button class="key" data-digit="1">1</button>
+        <button class="key" data-digit="2">2</button>
+        <button class="key" data-digit="3">3</button>
+        <button class="key operation" data-operation="+">+</button>
+
+        <button class="key zero" data-digit="0">0</button>
+        <button class="key" data-action="decimal">.</button>
+        <button class="key operation" data-action="equals">=</button>
+      </div>
+    </section>
+
+    <aside class="history-panel" id="historyPanel" hidden>
+      <div class="history-header">
+        <h2>History</h2>
+        <button id="closeHistoryButton" type="button">x</button>
+      </div>
+      <div class="history-list" id="historyList"></div>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

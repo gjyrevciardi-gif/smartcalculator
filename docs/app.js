@@ -20,6 +20,15 @@ const state = {
   waitingForNumber: false,
 };
 
+let lastTouchEnd = 0;
+document.addEventListener("touchend", (event) => {
+  const now = Date.now();
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault();
+  }
+  lastTouchEnd = now;
+}, { passive: false });
+
 menuButton.addEventListener("click", () => {
   markupPanel.hidden = !markupPanel.hidden;
 });
@@ -248,8 +257,8 @@ function render() {
 }
 
 function displayOperation(operation) {
-  if (operation === "/") return "÷";
-  if (operation === "x") return "×";
+  if (operation === "/") return "\u00f7";
+  if (operation === "x") return "\u00d7";
   if (operation === "-") return "-";
   return operation;
 }

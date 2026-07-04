@@ -20,15 +20,6 @@ const state = {
   waitingForNumber: false,
 };
 
-let lastTouchEnd = 0;
-document.addEventListener("touchend", (event) => {
-  const now = Date.now();
-  if (now - lastTouchEnd <= 300) {
-    event.preventDefault();
-  }
-  lastTouchEnd = now;
-}, { passive: false });
-
 menuButton.addEventListener("click", () => {
   markupPanel.hidden = !markupPanel.hidden;
 });
@@ -47,10 +38,28 @@ markupInput.addEventListener("input", () => {
   render();
 });
 
-keys.addEventListener("click", (event) => {
+keys.addEventListener("pointerdown", (event) => {
   const button = event.target.closest("button");
   if (!button) return;
+  event.preventDefault();
+  button.setPointerCapture?.(event.pointerId);
+  button.classList.add("is-pressed");
+});
 
+keys.addEventListener("pointerup", (event) => {
+  const button = event.target.closest("button");
+  if (!button) return;
+  event.preventDefault();
+  button.classList.remove("is-pressed");
+  button.releasePointerCapture?.(event.pointerId);
+  pressKey(button);
+});
+
+["pointercancel", "pointerleave"].forEach((eventName) => {
+  keys.addEventListener(eventName, clearPressedKey);
+});
+
+function pressKey(button) {
   if (button.dataset.digit) inputDigit(button.dataset.digit);
   if (button.dataset.operation) inputOperation(button.dataset.operation);
   if (button.dataset.action === "decimal") inputDecimal();
@@ -61,22 +70,13 @@ keys.addEventListener("click", (event) => {
   if (button.dataset.action === "equals") evaluate();
 
   render();
-});
+}
 
-keys.addEventListener("pointerdown", (event) => {
+function clearPressedKey(event) {
   const button = event.target.closest("button");
   if (!button) return;
-  button.classList.add("is-pressed");
-});
-
-["pointerup", "pointercancel", "pointerleave"].forEach((eventName) => {
-  keys.addEventListener(eventName, (event) => {
-    const button = event.target.closest("button");
-    if (!button) return;
-    button.classList.remove("is-pressed");
-  });
-});
-
+  button.classList.remove("is-pressed");
+}
 function inputDigit(digit) {
   if (state.lastExpression && state.waitingForNumber) {
     state.current = "0";

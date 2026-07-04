@@ -20,6 +20,17 @@ const state = {
   waitingForNumber: false,
 };
 
+["gesturestart", "gesturechange", "gestureend", "dblclick"].forEach((eventName) => {
+  document.addEventListener(eventName, (event) => {
+    event.preventDefault();
+  }, { passive: false });
+});
+
+document.addEventListener("touchmove", (event) => {
+  if (event.target.closest(".history-list") || event.target.closest("input")) return;
+  event.preventDefault();
+}, { passive: false });
+
 menuButton.addEventListener("click", () => {
   markupPanel.hidden = !markupPanel.hidden;
 });
@@ -77,6 +88,7 @@ function clearPressedKey(event) {
   if (!button) return;
   button.classList.remove("is-pressed");
 }
+
 function inputDigit(digit) {
   if (state.lastExpression && state.waitingForNumber) {
     state.current = "0";

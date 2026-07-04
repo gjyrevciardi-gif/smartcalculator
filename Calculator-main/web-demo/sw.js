@@ -1,4 +1,4 @@
-const CACHE_NAME = "smartcalculator-pwa-v5";
+const CACHE_NAME = "smartcalculator-pwa-v6";
 const APP_SHELL = [
   "./",
   "./index.html",

@@ -26,6 +26,21 @@ const state = {
   }, { passive: false });
 });
 
+let lastTouchEnd = 0;
+document.addEventListener("touchstart", (event) => {
+  if (event.touches.length > 1) {
+    event.preventDefault();
+  }
+}, { passive: false });
+
+document.addEventListener("touchend", (event) => {
+  const now = Date.now();
+  if (now - lastTouchEnd < 450) {
+    event.preventDefault();
+  }
+  lastTouchEnd = now;
+}, { passive: false });
+
 document.addEventListener("touchmove", (event) => {
   if (event.target.closest(".history-list") || event.target.closest("input")) return;
   event.preventDefault();

@@ -4,12 +4,14 @@
   background: #000;
   color: #fff;
   --app-pad-x: 12px;
-  --app-pad-top: max(14px, env(safe-area-inset-top));
-  --app-pad-bottom: max(28px, env(safe-area-inset-bottom));
+  --viewport-height: 100svh;
+  --viewport-top: 0px;
+  --app-pad-top: max(22px, env(safe-area-inset-top));
+  --app-pad-bottom: max(22px, env(safe-area-inset-bottom));
   --key-gap: 8px;
   --key-size: min(
     calc((100vw - (var(--app-pad-x) * 2) - (var(--key-gap) * 3)) / 4),
-    calc((100dvh - var(--app-pad-top) - var(--app-pad-bottom) - 54px - 38px - 104px - 56px - (var(--key-gap) * 4)) / 5)
+    calc((var(--viewport-height) - var(--app-pad-top) - var(--app-pad-bottom) - 54px - 38px - 104px - 52px - (var(--key-gap) * 4)) / 5)
   );
   width: 100%;
   height: 100%;
@@ -57,13 +59,14 @@ button {
 
 .app {
   position: fixed;
-  inset: 0;
+  top: var(--viewport-top);
+  right: 0;
+  bottom: auto;
+  left: 0;
   width: 100%;
   max-width: 100%;
-  height: 100svh;
-  height: 100dvh;
-  min-height: 100svh;
-  min-height: -webkit-fill-available;
+  height: var(--viewport-height);
+  min-height: 0;
   display: grid;
   place-items: center;
   padding: var(--app-pad-top) var(--app-pad-x) var(--app-pad-bottom);
@@ -198,7 +201,7 @@ button {
 .history-list {
   display: grid;
   gap: 14px;
-  max-height: calc(100svh - 110px);
+  max-height: calc(var(--viewport-height) - 110px);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;

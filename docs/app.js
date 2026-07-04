@@ -20,6 +20,17 @@ const state = {
   waitingForNumber: false,
 };
 
+syncViewportSize();
+window.addEventListener("resize", syncViewportSize);
+window.addEventListener("orientationchange", () => {
+  setTimeout(syncViewportSize, 250);
+});
+
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", syncViewportSize);
+  window.visualViewport.addEventListener("scroll", syncViewportSize);
+}
+
 ["gesturestart", "gesturechange", "gestureend", "dblclick"].forEach((eventName) => {
   document.addEventListener(eventName, (event) => {
     event.preventDefault();
@@ -113,6 +124,15 @@ function pressKey(button) {
   if (button.dataset.action === "equals") evaluate();
 
   render();
+}
+
+function syncViewportSize() {
+  const viewport = window.visualViewport;
+  const height = viewport?.height || window.innerHeight;
+  const top = viewport?.offsetTop || 0;
+
+  document.documentElement.style.setProperty("--viewport-height", `${height}px`);
+  document.documentElement.style.setProperty("--viewport-top", `${top}px`);
 }
 
 function bindControlButton(button, handler) {

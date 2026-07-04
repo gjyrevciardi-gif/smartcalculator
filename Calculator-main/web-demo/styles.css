@@ -228,13 +228,26 @@ button {
 
 .key {
   aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  padding: 0;
   border-radius: 999px;
   background: #333;
   color: #fff;
-  font-size: clamp(40px, 12vw, 66px);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  font-size: clamp(44px, 12.6vw, 64px);
   font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  line-height: 1;
   cursor: pointer;
-  transition: filter 120ms ease, transform 120ms ease;
+  transform: translateZ(0);
+  transition: background-color 70ms linear, color 70ms linear, filter 70ms linear, transform 70ms ease-out;
+  will-change: transform, filter;
+}
+
+.key[data-digit] {
+  font-size: clamp(48px, 13.2vw, 68px);
 }
 
 .key svg {
@@ -256,9 +269,10 @@ button {
   padding-bottom: 0.04em;
 }
 
-.key:active {
-  filter: brightness(1.35);
-  transform: scale(0.97);
+.key:active,
+.key.is-pressed {
+  filter: brightness(1.28);
+  transform: translateZ(0) scale(0.965);
 }
 
 .utility {
@@ -269,6 +283,7 @@ button {
 .operation {
   background: #ff9f0a;
   color: #fff;
+  font-size: clamp(52px, 14vw, 74px);
 }
 
 .operation.selected {

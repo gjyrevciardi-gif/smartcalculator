@@ -63,6 +63,20 @@ keys.addEventListener("click", (event) => {
   render();
 });
 
+keys.addEventListener("pointerdown", (event) => {
+  const button = event.target.closest("button");
+  if (!button) return;
+  button.classList.add("is-pressed");
+});
+
+["pointerup", "pointercancel", "pointerleave"].forEach((eventName) => {
+  keys.addEventListener(eventName, (event) => {
+    const button = event.target.closest("button");
+    if (!button) return;
+    button.classList.remove("is-pressed");
+  });
+});
+
 function inputDigit(digit) {
   if (state.lastExpression && state.waitingForNumber) {
     state.current = "0";

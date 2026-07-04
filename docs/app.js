@@ -46,16 +46,16 @@ document.addEventListener("touchmove", (event) => {
   event.preventDefault();
 }, { passive: false });
 
-menuButton.addEventListener("click", () => {
+bindControlButton(menuButton, () => {
   markupPanel.hidden = !markupPanel.hidden;
 });
 
-historyButton.addEventListener("click", () => {
+bindControlButton(historyButton, () => {
   historyPanel.hidden = false;
   renderHistory();
 });
 
-closeHistoryButton.addEventListener("click", () => {
+bindControlButton(closeHistoryButton, () => {
   historyPanel.hidden = true;
 });
 
@@ -64,9 +64,26 @@ markupInput.addEventListener("input", () => {
   render();
 });
 
-keys.addEventListener("pointerdown", (event) => {
+keys.addEventListener("touchstart", (event) => {
   const button = event.target.closest("button");
   if (!button) return;
+  event.preventDefault();
+  button.classList.add("is-pressed");
+  pressKey(button);
+}, { passive: false });
+
+keys.addEventListener("touchend", (event) => {
+  const button = event.target.closest("button");
+  if (!button) return;
+  event.preventDefault();
+  button.classList.remove("is-pressed");
+}, { passive: false });
+
+keys.addEventListener("touchcancel", clearPressedKey);
+
+keys.addEventListener("pointerdown", (event) => {
+  const button = event.target.closest("button");
+  if (!button || event.pointerType === "touch") return;
   event.preventDefault();
   button.setPointerCapture?.(event.pointerId);
   button.classList.add("is-pressed");
@@ -74,7 +91,7 @@ keys.addEventListener("pointerdown", (event) => {
 
 keys.addEventListener("pointerup", (event) => {
   const button = event.target.closest("button");
-  if (!button) return;
+  if (!button || event.pointerType === "touch") return;
   event.preventDefault();
   button.classList.remove("is-pressed");
   button.releasePointerCapture?.(event.pointerId);
@@ -96,6 +113,31 @@ function pressKey(button) {
   if (button.dataset.action === "equals") evaluate();
 
   render();
+}
+
+function bindControlButton(button, handler) {
+  let lastTouch = 0;
+
+  button.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+    lastTouch = Date.now();
+    button.classList.add("is-pressed");
+    handler();
+  }, { passive: false });
+
+  button.addEventListener("touchend", (event) => {
+    event.preventDefault();
+    button.classList.remove("is-pressed");
+  }, { passive: false });
+
+  button.addEventListener("touchcancel", () => {
+    button.classList.remove("is-pressed");
+  });
+
+  button.addEventListener("click", () => {
+    if (Date.now() - lastTouch < 700) return;
+    handler();
+  });
 }
 
 function clearPressedKey(event) {

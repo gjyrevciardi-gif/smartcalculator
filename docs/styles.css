@@ -34,8 +34,8 @@ body {
 button {
   border: 0;
   font: inherit;
-  touch-action: manipulation;
-  -ms-touch-action: manipulation;
+  touch-action: none;
+  -ms-touch-action: none;
   -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
   user-select: none;
@@ -262,6 +262,7 @@ button {
   transform: translateZ(0);
   transition: filter 45ms linear, transform 45ms ease-out;
   will-change: transform, filter;
+  touch-action: none;
 }
 
 .key[data-digit] {
@@ -288,7 +289,10 @@ button {
 }
 
 .key:active,
-.key.is-pressed {
+.key.is-pressed,
+.menu-button.is-pressed,
+.history-button.is-pressed,
+.history-header button.is-pressed {
   filter: brightness(1.36);
   transform: translateZ(0) scale(0.975);
 }
